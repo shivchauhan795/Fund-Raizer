@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import { fetchuser, updateProfile } from '@/actions/useractions'
 
-const dashboard = () => {
+const Dashboard = () => {
   const { data: session, update } = useSession()
   const router = useRouter()
   const [form, setform] = useState({})
@@ -59,4 +59,4 @@ const dashboard = () => {
   )
 }
 
-export default dashboard
+export default Dashboard
