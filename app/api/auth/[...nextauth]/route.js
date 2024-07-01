@@ -33,6 +33,34 @@ export const authOptions = NextAuth({
         //     from: 'NextAuth.js <no-reply@example.com>'
         // }),
     ],
+    cookies: {
+        sessionToken: {
+            name: `__Secure-next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax', // Change to 'strict' if needed
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
+        callbackUrl: {
+            name: `__Secure-next-auth.callback-url`,
+            options: {
+                sameSite: 'lax', // Change to 'strict' if needed
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
+        csrfToken: {
+            name: `__Secure-next-auth.csrf-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax', // Change to 'strict' if needed
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
+    },
 
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
@@ -41,7 +69,7 @@ export const authOptions = NextAuth({
                 // check current User
                 const currentUser = await User.findOne({ email: user.email })
                 if (!currentUser) {
-                    const newUser =await User.create({
+                    const newUser = await User.create({
                         email: user.email,
                         username: user.email.split("@")[0],
                     })
@@ -50,7 +78,7 @@ export const authOptions = NextAuth({
             }
         },
         async session({ session, user, token }) {
-            const dbUser = await User.findOne({email:session.user.email})
+            const dbUser = await User.findOne({ email: session.user.email })
             session.user.name = dbUser.username
             return session
         },
